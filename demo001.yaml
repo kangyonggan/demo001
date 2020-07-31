@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo001
+spec:
+  ports:
+    - port: 8080
+  selector:
+    name: demo001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo001
+spec:
+  selector:
+    matchLabels:
+      name: demo001
+  template:
+    metadata:
+      labels:
+        name: demo001
+    spec:
+      containers:
+        - name: demo001
+          image: kyg/demo001-docker
+          imagePullPolicy: IfNotPresent #Always
+          ports:
+            - containerPort: 8080
+
