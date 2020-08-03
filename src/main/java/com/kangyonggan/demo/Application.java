@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+
 /**
  * @author kyg
  */
@@ -63,6 +68,31 @@ public class Application {
         }
 
         return user;
+    }
+
+    /**
+     * 测试文件读写
+     *
+     * @param str
+     * @return
+     */
+    @GetMapping("fileReadWrite")
+    public String fileReadWrite(String str) {
+        String filename = System.getProperty("user.home") + File.separator + "demo001.txt";
+        try (FileWriter writer = new FileWriter(filename);
+             BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            writer.write("字符串~" + str);
+            writer.flush();
+            log.info("字符串写入成功，文件位置:{}", System.getProperty("user.home"));
+
+            str = reader.readLine();
+            log.info("读取文件内容：{}", str);
+            return str;
+        } catch (Exception e) {
+            log.error("文件读写异常", e);
+        }
+
+        return "err";
     }
 
     @Bean
